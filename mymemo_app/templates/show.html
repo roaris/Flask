@@ -1,0 +1,7 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <h1>{{message}}</h1>
+    <p>タイトル: {{post.title}}</p>
+    {{post.content}}
+    <p><a href='/'>戻る</a> | <a href='/edit/{{post.id}}'>編集</a> | <a href='/destory/{{post.id}}'>削除</a></p>
+{% endblock %}
