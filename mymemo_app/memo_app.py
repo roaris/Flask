@@ -1,9 +1,10 @@
 from flask import Flask, request, render_template
 from flask_sqlalchemy import SQLAlchemy
+import os
 
 app = Flask(__name__)
 
-db_uri = 'mysql+pymysql://root:Kyoto0464#@localhost/memo?charset=utf8'
+db_uri = "postgresql+psycopg2://postgres:kyoto0464@localhost/memo"
 app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 db = SQLAlchemy(app)
 
@@ -41,7 +42,7 @@ def create():
     new_post.content = request.form['content']
     db.session.add(new_post)
     db.session.commit()
-
+    
     return render_template('show.html', message=message, post=new_post)
 
 @app.route('/destory/<int:id>')
@@ -58,6 +59,7 @@ def destory(id):
 def edit(id):
     message = 'Edit Memo'+str(id)
     post = Post.query.get(id)
+    
     return render_template('edit.html', message=message, post=post)
 
 @app.route('/update/<int:id>', methods=['POST'])
@@ -69,3 +71,6 @@ def update(id):
     db.session.commit()
 
     return render_template('show.html', message = message, post = post)
+
+if __name__=='__main__':
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
